@@ -8,14 +8,14 @@ namespace Epic_1._1___Bank_task
 {
     internal class Person : Client
     {
-        public int Person_id { get; private set; }
+        public int PersonId { get; private set; }
         public string Address { get; private set; }
 
         // variable for auto-increment
-        protected static int person_id = 0;
+        protected static int personId = 0;
         public Person(string name, string address) : base(name)
         {
-            Person_id = person_id++;
+            PersonId = personId++;
             Address = address;
         }
     }

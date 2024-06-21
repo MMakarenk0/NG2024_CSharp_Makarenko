@@ -9,28 +9,28 @@ namespace Epic_1._1___Bank_task
 {
     internal class Client
     {
-        public int Client_id { get; private set; }
+        public int ClientId { get; private set; }
         public string Name { get; private set; }
-        public int Account_number { get; private set; }
+        public int AccountNumber { get; private set; }
         protected Balance balance;
         protected List<Transaction> transactions;
 
         // variables for auto-increment
-        protected static int account_number = 0;
-        protected static int client_number = 0;
+        protected static int accountNumber = 0;
+        protected static int clientNumber = 0;
         public Client(string name) 
         {
-            Client_id = client_number++;
-            Account_number = account_number++;
+            ClientId = clientNumber++;
+            AccountNumber = accountNumber++;
             Name = name;
-            balance = new Balance(Client_id);
+            balance = new Balance(ClientId);
             transactions = new List<Transaction>();
         }
         public void Deposit(decimal amount)
         {
             if (amount > 0)
             {
-                balance.Update_balance(amount);
+                balance.UpdateBalance(amount);
                 var transaction = new Transaction(amount);
                 transaction.RecordTransaction();
             }
@@ -41,9 +41,9 @@ namespace Epic_1._1___Bank_task
         }
         public void Withdraw(decimal amount)
         {
-            if (amount > 0 && amount <= balance.Get_balance())
+            if (amount > 0 && amount <= balance.GetBalance())
             {
-                balance.Update_balance(-amount);
+                balance.UpdateBalance(-amount);
                 var transaction = new Transaction(-amount);
                 transaction.RecordTransaction();
             }
@@ -54,7 +54,7 @@ namespace Epic_1._1___Bank_task
         }
         public decimal GetBalance()
         {
-            return balance.Get_balance();
+            return balance.GetBalance();
         }
         public List<Transaction> GetTransactions()
         {

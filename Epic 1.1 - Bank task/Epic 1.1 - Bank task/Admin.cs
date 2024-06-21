@@ -8,12 +8,12 @@ namespace Epic_1._1___Bank_task
 {
     internal class Admin : Person
     {
-        public int Admin_id { get; private set; }
+        public int AdminId { get; private set; }
         public Role Role { get; private set; }
         protected static List<Client> clients = new List<Client>();
 
         // variable for auto-increment
-        protected static int admin_id = 0;
+        protected static int adminId = 0;
         public Admin(string name, string address, Role role) : base(name, address)
         {
             Role = role;
@@ -23,9 +23,9 @@ namespace Epic_1._1___Bank_task
             clients.Add(client);
             Console.WriteLine($"Client {client.Name} added.");
         }
-        public void RemoveClient(int client_id)
+        public void RemoveClient(int clientId)
         {
-            var client = clients.Find(c => c.Client_id == client_id);
+            var client = clients.Find(c => c.ClientId == clientId);
             if (client != null)
             {
                 clients.Remove(client);
@@ -40,8 +40,8 @@ namespace Epic_1._1___Bank_task
         {
             foreach (var client in clients)
             {
-                var client_transactions = client.GetTransactions();
-                foreach (var transaction in client_transactions)
+                var clientTransactions = client.GetTransactions();
+                foreach (var transaction in clientTransactions)
                 {
                     Console.WriteLine(transaction.GetTransactionDetails());
                 }

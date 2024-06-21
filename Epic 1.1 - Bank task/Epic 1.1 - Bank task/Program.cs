@@ -24,7 +24,7 @@
 
             admin.GenerateReport();
 
-            admin.RemoveClient(client1.Client_id);
+            admin.RemoveClient(client1.ClientId);
         }
     }
 }
