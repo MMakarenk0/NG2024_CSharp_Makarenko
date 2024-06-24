@@ -14,7 +14,7 @@ namespace Epic_1._1___Bank_task
 
         // variable for auto-increment
         protected static int adminId = 0;
-        public Admin(string name, string address, Role role) : base(name, address)
+        public Admin(string address, Role role) : base(address)
         {
             Role = role;
         }

@@ -4,9 +4,9 @@
     {
         static void Main(string[] args)
         {
-            Admin admin = new Admin( "Admin User", "123 Admin St.", Role.Administrator);
+            Admin admin = new Admin("123 Admin St.", Role.Administrator);
 
-            Person client1 = new Person("John Doe", "456 Elm St.");
+            Client client1 = new Client("John Doe", "456 Elm St.");
             admin.AddClient(client1);
 
             client1.Deposit(500m);
@@ -14,7 +14,7 @@
 
             Console.WriteLine($"Client1 Balance: {client1.GetBalance()}");
 
-            Person client2 = new Person("Jane Smith", "789 Pine St.");
+            Client client2 = new Client("Jane Smith", "789 Pine St.");
             admin.AddClient(client2);
 
             client2.Deposit(1000m);

@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace Epic_1._1___Bank_task
 {
-    internal class Client
+    internal class Client : Person
     {
         public int ClientId { get; private set; }
         public string Name { get; private set; }
@@ -18,7 +18,7 @@ namespace Epic_1._1___Bank_task
         // variables for auto-increment
         protected static int accountNumber = 0;
         protected static int clientNumber = 0;
-        public Client(string name) 
+        public Client(string address, string name) : base(address)
         {
             ClientId = clientNumber++;
             AccountNumber = accountNumber++;
