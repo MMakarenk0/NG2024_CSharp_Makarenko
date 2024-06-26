@@ -10,12 +10,13 @@ namespace Epic_1._1___Bank_task
     {
         public int AdminId { get; private set; }
         public Role Role { get; private set; }
-        protected static List<Client> clients = new List<Client>();
+        protected List<Client> clients = new List<Client>();
 
         // variable for auto-increment
-        protected static int adminId = 0;
+        protected static int adminNumber = 0;
         public Admin(string address, Role role) : base(address)
         {
+            AdminId = adminNumber++;
             Role = role;
         }
         public void AddClient(Client client)
