@@ -1,6 +1,6 @@
-﻿namespace ReportApp.Models;
+﻿namespace ReportApp.Models.Entity;
 
-public class Client
+public class Admin
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
@@ -8,7 +8,8 @@ public class Client
     public string PreferedName { get; set; }
     public string Pronouns { get; set; }
     public string City { get; set; }
+    public bool isAdmin { get; set; } = true;
 
-    // Which Admin is a manager of Client
-    public Admin Admin { get; set; }
+    // Which Clients this Admin should manage
+    public List<Client> Clients { get; set; }
 }
