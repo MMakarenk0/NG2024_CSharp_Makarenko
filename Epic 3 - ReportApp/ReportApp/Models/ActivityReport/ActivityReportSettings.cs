@@ -1,4 +1,6 @@
-﻿namespace ReportApp.Models;
+﻿using ReportApp.Models.Entity;
+
+namespace ReportApp.Models.ActivityReport;
 
 public class ActivityReportSettings
 {
