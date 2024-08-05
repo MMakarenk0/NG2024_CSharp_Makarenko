@@ -14,7 +14,9 @@
     <None Remove="JsonExamples\CurrentShopItems1.json" />
     <None Remove="JsonExamples\CurrentShopItems2.json" />
     <None Remove="ReportConfigurations\Activity.json" />
-    <None Remove="Templates\ActivityReport.xlsx" />
+    <None Remove="ReportConfigurations\CurrentShopItems.json" />
+    <None Remove="Templates\ActivityReportTemplate.xlsx" />
+    <None Remove="Templates\CurrentShopItemsTemplate.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,9 @@
     <Content Include="JsonExamples\CurrentShopItems.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReportConfigurations\CurrentShopItems.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ReportConfigurations\Activity.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -39,7 +44,10 @@
     <Content Include="JsonExamples\ActivityReportClientGenerated.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\ActivityReport.xlsx">
+    <Content Include="Templates\CurrentShopItemsTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ActivityReportTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -47,6 +55,11 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="ClosedXML.Report" Version="0.2.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Reports\" />
   </ItemGroup>
 
 </Project>
