@@ -1,0 +1,9 @@
+﻿{
+  "DefaultRow": 4,
+  "FirstColumn": 1,
+  "ReportTitleRow": 1,
+  "FirstRowForDynamicGroup": 4,
+  "FirstRowForStaticGroup": 5,
+  "LastColumn": 7,
+  "LastRow": 10
+}
