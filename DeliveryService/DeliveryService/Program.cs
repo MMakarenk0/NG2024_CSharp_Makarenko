@@ -1,5 +1,6 @@
 using DataLayer;
 using DataLayer.Data.Infrastructure;
+using BLL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDataAccessLayer(configuration);
+builder.Services.AddBusinessLogicLayer();
 
 var app = builder.Build();
 

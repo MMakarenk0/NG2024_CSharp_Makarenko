@@ -1,6 +1,6 @@
-﻿namespace DataLayer.Models;
+﻿namespace BLL.Models.UpdateEntityModels;
 
-public class ItemDto
+public class UpdateItemModel
 {
     public Guid Id { get; set; }
     public Guid? SenderId { get; set; }
