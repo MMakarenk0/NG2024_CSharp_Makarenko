@@ -2,7 +2,7 @@
 
 namespace ReportApp.Services;
 
-public class TemplateLoaderService : ITemplateLoader
+public class TemplateLoader
 {
     public XLTemplate LoadTemplate(string path)
     {

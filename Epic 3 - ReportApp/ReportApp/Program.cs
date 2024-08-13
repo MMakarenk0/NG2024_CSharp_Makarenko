@@ -1,23 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ReportApp.Configuration;
-using ReportApp.Services;
-using ReportApp.Services.Activity;
-using ReportApp.Services.CurrentShopItems;
+using ReportApp.Services.ActivityReport;
+using ReportApp.Services.CurrentItemsShop;
 
 var serviceCollection = new ServiceCollection();
 ServiceConfigurator.ConfigureServices(serviceCollection);
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
-var reportGenerators = serviceProvider.GetServices<IReportGenerator>();
+var ActivityReportGenerator = serviceProvider.GetService<ActivityReportGeneratorService>();
+var CurrentShopItemsReportGenerator = serviceProvider.GetService<CurrentShopItemsReportGeneratorService>();
 
-foreach (var reportGenerator in reportGenerators)
-{
-    if (reportGenerator is ActivityReportGeneratorService)
-    {
-        reportGenerator.GenerateReport("./JsonExamples/ActivityReportAdminGenerated.json", "../../../Reports/ActivityReport.xlsx");
-    }
-    else if (reportGenerator is CurrentShopItemsReportGeneratorService)
-    {
-        reportGenerator.GenerateReport("./JsonExamples/CurrentShopItems2.json", "../../../Reports/CurrentShopItems.xlsx");
-    }
-}
+ActivityReportGenerator.GenerateReport("../../../Reports/ActivityReport.xlsx");
+CurrentShopItemsReportGenerator.GenerateReport("../../../Reports/CurrentShopItems.xlsx");
