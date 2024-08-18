@@ -1,6 +1,6 @@
-﻿namespace DataLayer.Models;
+﻿namespace BLL.Models.AddEntityModels;
 
-public class ItemDto
+public class SaveItemModel
 {
     public Guid Id { get; set; }
     public Guid? SenderId { get; set; }

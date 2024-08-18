@@ -39,14 +39,6 @@ public class DataSeeder
             StorageId = storageId
         };
 
-        var storage = new Storage
-        {
-            Id = storageId,
-            Address = "456 Maple Ave, Apt 12, Newtown, USA",
-            DirectorId = directorId,
-            Number = 235
-        };
-
         var item = new Item
         {
             Id = itemId,
@@ -62,6 +54,14 @@ public class DataSeeder
         {
             ItemId = itemId,
             CategoryId = categoryId
+        };
+
+        var storage = new Storage
+        {
+            Id = storageId,
+            Address = "456 Maple Ave, Apt 12, Newtown, USA",
+            DirectorId = directorId,
+            Number = 235
         };
 
         foreach (var client in clients)
