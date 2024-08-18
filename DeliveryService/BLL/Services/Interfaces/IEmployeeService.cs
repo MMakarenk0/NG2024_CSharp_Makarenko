@@ -11,4 +11,5 @@ public interface IEmployeeService
     Task<Guid> UpdateAsync(UpdateEmployeeModel model);
     Task DeleteAsync(Guid id);
     Task<EmployeeReadModel> GetByIdAsync(Guid id);
+    Task<IEnumerable<EmployeeReadModel>> GetByStorage(Guid storageId);
 }

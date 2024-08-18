@@ -6,6 +6,7 @@ using BLL.Services.Interfaces;
 using DataLayer.Data.Infrastructure;
 using DataLayer.Data.Repositories.Interfaces;
 using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services.Classes;
 
@@ -57,6 +58,7 @@ public class ItemService : IItemService
                     CategoryId = categoryId
                 };
                 item.ItemCategories.Add(itemCategory);
+                await itemCategoryRepository.Create(itemCategory);
             }
         }
 
@@ -139,7 +141,79 @@ public class ItemService : IItemService
         return _mapper.Map<IEnumerable<ItemReadModel>>(items);
     }
 
-    public async Task<Guid> UpdateAsync(UpdateItemModel model)
+    public async Task<IEnumerable<ItemReadModel>> GetByFilters(
+        string? description, 
+        float? minWeight, 
+        float? maxWeight, 
+        List<Guid> categoryIds, 
+        DateTime? startDate, 
+        DateTime? endDate)
+    {
+        var itemRepository = _unitOfWork.ItemRepository;
+
+        var query = itemRepository.GetAll();
+
+        if (!string.IsNullOrEmpty(description))
+        {
+            query = query.Where(i => i.Description.Contains(description));
+        }
+
+        if (minWeight.HasValue)
+        {
+            query = query.Where(i => i.Weight >= minWeight.Value);
+        }
+
+        if (maxWeight.HasValue)
+        {
+            query = query.Where(i => i.Weight <= maxWeight.Value);
+        }
+
+        if (categoryIds != null && categoryIds.Any())
+        {
+            query = query.Where(i => i.ItemCategories.Any(ic => categoryIds.Contains(ic.CategoryId)));
+        }
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(i => i.Date >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(i => i.Date <= endDate.Value);
+        }
+
+        var items = await query.ToListAsync();
+
+        return _mapper.Map<IEnumerable<ItemReadModel>>(items);
+    }
+
+    public async Task<Guid> UpdateItemStatus(Guid itemId, bool? newStatus)
+    {
+        var itemRepository = _unitOfWork.ItemRepository;
+
+        var item = await itemRepository.Find(itemId);
+
+        if (item == null)
+            throw new Exception($"Item with Id {itemId} not found.");
+
+        if (newStatus.HasValue)
+        {
+            item.isReceived = newStatus.Value;
+        }
+        else
+        {
+            item.isReceived = !item.isReceived;
+        }
+
+        var result = await itemRepository.Update(item);
+
+        await _unitOfWork.SaveChangesAsync();   
+
+        return result.Id;
+    }
+
+        public async Task<Guid> UpdateAsync(UpdateItemModel model)
     {
         var itemRepository = _unitOfWork.ItemRepository;
         var clientRepository = _unitOfWork.ClientRepository;
@@ -171,7 +245,7 @@ public class ItemService : IItemService
             item.Storage = storage;
         }
 
-        await UpdateItemCategory(model, itemCategoryRepository, item);
+        await UpdateItemCategory(model, item);
 
         var result = await itemRepository.Update(item);
 
@@ -180,8 +254,10 @@ public class ItemService : IItemService
         return result.Id;
     }
 
-    private async Task UpdateItemCategory(UpdateItemModel model, IItemCategoryRepository itemCategoryRepository, Item item)
+    private async Task UpdateItemCategory(UpdateItemModel model, Item item)
     {
+        var itemCategoryRepository = _unitOfWork.ItemCategoryRepository;
+
         if (model.CategoryIds != null && model.CategoryIds.Any())
         {
             var existingItemCategories = await itemCategoryRepository.GetAllAsync(ic => ic.ItemId == item.Id);

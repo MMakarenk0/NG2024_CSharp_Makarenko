@@ -27,9 +27,11 @@ using (var scope = app.Services.CreateScope())
         var context = serviceProvider.GetRequiredService<DeliveryServiceDbContext>();
         DbInitializer.InitializeDatabase(context);
 
-        var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-        var dataSeeder = new DataSeeder(unitOfWork);
-        await dataSeeder.Seed();
+        // data seeding
+
+        //var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+        //var dataSeeder = new DataSeeder(unitOfWork);
+        //await dataSeeder.Seed();
     }
     catch (Exception)
     {

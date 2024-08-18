@@ -40,16 +40,19 @@ public class AutomapperBLLProfile : Profile
             .ReverseMap();
 
         CreateMap<Storage, StorageReadModel>()
+            .ForMember(
+                    dest => dest.Items,
+                    opt => opt.MapFrom(src => src.Items))
             .ReverseMap();
 
         CreateMap<Storage, SaveStorageModel>()
             .ForMember(dest => dest.DirectorId, opt => opt.Ignore())
             .ForMember(
                 dest => dest.EmployeeIds,
-                opt => opt.MapFrom(src => src.Employees.Select(ic => ic.Id).ToList()))
+                opt => opt.MapFrom(src => src.Employees.Select(e => e.Id).ToList()))
             .ForMember(
                 dest => dest.ItemIds,
-                opt => opt.MapFrom(src => src.Items.Select(ic => ic.Id).ToList()))
+                opt => opt.MapFrom(src => src.Items.Select(e => e.Id).ToList()))
             .ReverseMap();
 
         CreateMap<Storage, UpdateStorageModel>()

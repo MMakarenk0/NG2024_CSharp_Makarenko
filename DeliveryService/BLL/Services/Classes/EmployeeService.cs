@@ -4,7 +4,6 @@ using BLL.Models.GetEntityModels;
 using BLL.Models.UpdateEntityModels;
 using BLL.Services.Interfaces;
 using DataLayer.Data.Infrastructure;
-using DataLayer.Data.Repositories.Realization;
 using DataLayer.Entities;
 
 namespace BLL.Services.Classes;
@@ -21,8 +20,15 @@ public class EmployeeService : IEmployeeService
     public async Task<Guid> AddAsync(SaveEmployeeModel model)
     {
         var employeeRepository = _unitOfWork.EmployeeRepository;
+        var storageRepository = _unitOfWork.StorageRepository;
 
         var employee = _mapper.Map<Employee>(model);
+
+        if (model.StorageId.HasValue)
+        {
+            var storage = await storageRepository.Find(model.StorageId.Value);
+            employee.Storage = storage;
+        }
 
         var result = await employeeRepository.Create(employee);
 
@@ -54,6 +60,15 @@ public class EmployeeService : IEmployeeService
         var employee = await employeeRepository.Find(id);
 
         return _mapper.Map<EmployeeReadModel>(employee);
+    }
+
+    public async Task<IEnumerable<EmployeeReadModel>> GetByStorage(Guid storageId)
+    {
+        var storageRepository = _unitOfWork.StorageRepository;
+
+        var storage = await storageRepository.Find(storageId);
+
+        return _mapper.Map<IEnumerable<EmployeeReadModel>>(storage.Employees);
     }
 
     public async Task<Guid> UpdateAsync(UpdateEmployeeModel model)

@@ -20,8 +20,15 @@ public class ManagerService : IManagerService
     public async Task<Guid> AddAsync(SaveManagerModel model)
     {
         var managerRepository = _unitOfWork.ManagerRepository;
+        var storageRepository = _unitOfWork.StorageRepository;
 
         var manager = _mapper.Map<Manager>(model);
+
+        if (model.StorageId.HasValue)
+        {
+            var storage = await storageRepository.Find(model.StorageId.Value);
+            manager.Storage = storage;
+        }
 
         var result = await managerRepository.Create(manager);
 
@@ -57,6 +64,26 @@ public class ManagerService : IManagerService
 
     public async Task<Guid> UpdateAsync(UpdateManagerModel model)
     {
-        throw new NotImplementedException();
+        var managerRepository = _unitOfWork.ManagerRepository;
+        var storageRepository = _unitOfWork.StorageRepository;
+
+        var manager = await managerRepository.Find(model.Id);
+
+        if (manager == null)
+            throw new Exception($"Manager with Id {model.Id} not found.");
+
+        _mapper.Map(model, manager);
+
+        if (model.StorageId.HasValue)
+        {
+            var storage = await storageRepository.Find(model.StorageId.Value);
+            manager.Storage = storage;
+        }
+
+        var result = await managerRepository.Update(manager);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return result.Id;
     }
 }
