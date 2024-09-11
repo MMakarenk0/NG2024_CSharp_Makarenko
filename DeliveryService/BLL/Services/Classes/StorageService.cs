@@ -105,6 +105,8 @@ public class StorageService : IStorageService
 
         await storageRepository.Update(storage);
 
+        await _unitOfWork.SaveChangesAsync();
+
         return storage.Id;
     }
 

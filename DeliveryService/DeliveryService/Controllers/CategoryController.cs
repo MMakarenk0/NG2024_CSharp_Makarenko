@@ -32,8 +32,19 @@ public class CategoryController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var category = await _categoryService.GetByIdAsync(id);
-        return Ok(category);
+        try
+        {
+            var category = await _categoryService.GetByIdAsync(id);
+            return Ok(category);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 
     [HttpPost]
@@ -50,8 +61,19 @@ public class CategoryController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(UpdateCategoryModel model)
     {
-        var category = await _categoryService.UpdateAsync(model);
-        return Ok(category);
+        try
+        {
+            var category = await _categoryService.UpdateAsync(model);
+            return Ok(category);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 
     [HttpDelete("{id}")]

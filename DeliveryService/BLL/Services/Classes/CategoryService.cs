@@ -79,7 +79,7 @@ public class CategoryService : ICategoryService
 
         var category = await categoryRepository.Find(model.Id);
         if (category == null)
-            throw new Exception($"Category with Id {model.Id} not found.");
+            throw new KeyNotFoundException($"Category with Id {model.Id} not found.");
 
         _mapper.Map(model, category);
 

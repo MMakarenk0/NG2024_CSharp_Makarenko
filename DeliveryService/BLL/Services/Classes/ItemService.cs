@@ -4,7 +4,6 @@ using BLL.Models.GetEntityModels;
 using BLL.Models.UpdateEntityModels;
 using BLL.Services.Interfaces;
 using DataLayer.Data.Infrastructure;
-using DataLayer.Data.Repositories.Interfaces;
 using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -110,7 +109,7 @@ public class ItemService : IItemService
 
         var items = await itemRepository.GetAllAsync(i => i.SenderId == client.Id);
 
-        return _mapper.Map<ICollection<ItemReadModel>>(items);
+        return _mapper.Map<IEnumerable<ItemReadModel>>(items);
     }
 
     public async Task<IEnumerable<ItemReadModel>> GetByRecieverPhone(string receiverPhone)
@@ -129,7 +128,7 @@ public class ItemService : IItemService
 
         var items = await itemRepository.GetAllAsync(i => i.ReceiverId == client.Id);
 
-        return _mapper.Map<ICollection<ItemReadModel>>(items);
+        return _mapper.Map<IEnumerable<ItemReadModel>>(items);
     }
 
     public async Task<IEnumerable<ItemReadModel>> GetByStorage(Guid storageId)
@@ -142,11 +141,11 @@ public class ItemService : IItemService
     }
 
     public async Task<IEnumerable<ItemReadModel>> GetByFilters(
-        string? description, 
-        float? minWeight, 
-        float? maxWeight, 
-        List<Guid> categoryIds, 
-        DateTime? startDate, 
+        string? description,
+        float? minWeight,
+        float? maxWeight,
+        List<Guid> categoryIds,
+        DateTime? startDate,
         DateTime? endDate)
     {
         var itemRepository = _unitOfWork.ItemRepository;
@@ -208,12 +207,12 @@ public class ItemService : IItemService
 
         var result = await itemRepository.Update(item);
 
-        await _unitOfWork.SaveChangesAsync();   
+        await _unitOfWork.SaveChangesAsync();
 
         return result.Id;
     }
 
-        public async Task<Guid> UpdateAsync(UpdateItemModel model)
+    public async Task<Guid> UpdateAsync(UpdateItemModel model)
     {
         var itemRepository = _unitOfWork.ItemRepository;
         var clientRepository = _unitOfWork.ClientRepository;

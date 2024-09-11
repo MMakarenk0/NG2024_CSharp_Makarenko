@@ -36,7 +36,7 @@ public class EmployeeController : Controller
         return Ok(employee);
     }
 
-    [HttpGet("{id}/storage")]
+    [HttpGet("{storageId}/storage")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByStorage(Guid storageId)
