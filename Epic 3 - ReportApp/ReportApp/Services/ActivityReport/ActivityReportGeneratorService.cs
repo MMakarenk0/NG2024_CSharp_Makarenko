@@ -1,30 +1,30 @@
 ﻿using ClosedXML.Excel;
-using ClosedXML.Report;
 using ReportApp.Models.ActivityReport;
 using ReportApp.Models.Entity;
 
-namespace ReportApp.Services.Activity
+namespace ReportApp.Services.ActivityReport
 {
-    public class ActivityReportGeneratorService : IReportGenerator
+    public class ActivityReportGeneratorService : ReportGeneratorBase
     {
-        private readonly ITemplateLoader _templateLoader;
-        private readonly IConfigurationLoader<ActivityReportConfiguration> _configurationLoader;
-        private readonly IReportSerializer<ActivityReportModel> _reportSerializer;
+        private const string templatePath = "./Templates/ActivityReportTemplate.xlsx";
+        private const string jsonPath = "./JsonExamples/ActivityReportAdminGenerated.json";
+        private const string configPath = "./ReportConfigurations/Activity.json";
 
+        private readonly ActivityReportModel model;
+        private readonly ActivityReportConfiguration configuration;
         private Dictionary<string, Func<ActivityReportModel, object>> KeyValuePairs { get; set; }
         private ActivityReportSettings Settings { get; set; }
-
         public ActivityReportGeneratorService(
-            ITemplateLoader templateLoader,
-            IConfigurationLoader<ActivityReportConfiguration> configurationLoader,
-            IReportSerializer<ActivityReportModel> reportSerializer)
+            TemplateLoader templateLoader,
+            ConfigurationLoader configurationLoader,
+            ReportSerializer reportSerializer)
+            : base(templateLoader, configurationLoader, reportSerializer)
         {
-            _templateLoader = templateLoader;
-            _configurationLoader = configurationLoader;
-            _reportSerializer = reportSerializer;
             InitializeKeyValuePairs();
+            template = templateLoader.LoadTemplate(templatePath);
+            model = reportSerializer.DeserializeReportModel<ActivityReportModel>(jsonPath);
+            configuration = configurationLoader.LoadConfiguration<ActivityReportConfiguration>(configPath);
         }
-
         private void InitializeKeyValuePairs()
         {
             KeyValuePairs = new Dictionary<string, Func<ActivityReportModel, object>>
@@ -37,21 +37,7 @@ namespace ReportApp.Services.Activity
             };
         }
 
-        public void GenerateReport(string jsonPath, string outputPath)
-        {
-            var template = _templateLoader.LoadTemplate("./Templates/ActivityReportTemplate.xlsx");
-            var configuration = _configurationLoader.LoadConfiguration("./ReportConfigurations/Activity.json");
-
-            var model = _reportSerializer.DeserializeReportModel(jsonPath);
-            FillSettings(model);
-            FillReportDataFromModel(template, configuration, model);
-            FillHeader(template, configuration);
-
-            template.Generate();
-            template.SaveAs(outputPath);
-        }
-
-        private void FillSettings(ActivityReportModel model)
+        protected override void FillSettings()
         {
             Admin? generatedByAdmin = null;
             Client? generatedByClient = null;
@@ -74,7 +60,7 @@ namespace ReportApp.Services.Activity
             };
         }
 
-        private void FillHeader(XLTemplate template, ActivityReportConfiguration configuration)
+        protected override void FillHeader()
         {
             if (Settings != null)
             {
@@ -94,7 +80,7 @@ namespace ReportApp.Services.Activity
             }
         }
 
-        private void FillReportDataFromModel(XLTemplate template, ActivityReportConfiguration configuration, ActivityReportModel model)
+        protected override void FillReportData()
         {
             var worksheet = template.Workbook.Worksheets.First();
             worksheet.SetShowGridLines(false);
@@ -126,10 +112,10 @@ namespace ReportApp.Services.Activity
                 newRange.Style = style;
                 newRange.Value = title;
 
-                CleanTestData(template, configuration, lastDataColumn);
+                CleanTestData(lastDataColumn);
                 if (configuration.LastColumn != lastDataColumn)
                 {
-                    DrawBorders(worksheet, configuration, lastDataColumn);
+                    DrawBorders(worksheet, lastDataColumn);
                 }
             }
             else
@@ -164,7 +150,7 @@ namespace ReportApp.Services.Activity
             worksheet.Columns(configuration.FirstColumn, configuration.LastColumn).AdjustToContents();
         }
 
-        private void CleanTestData(XLTemplate template, ActivityReportConfiguration configuration, int actualLastColumn)
+        private void CleanTestData(int actualLastColumn)
         {
             var worksheet = template.Workbook.Worksheets.First();
             for (int row = configuration.DefaultRow; row <= configuration.LastRow; row++)
@@ -176,7 +162,7 @@ namespace ReportApp.Services.Activity
             }
         }
 
-        private void DrawBorders(IXLWorksheet worksheet, ActivityReportConfiguration configuration, int actualLastColumn)
+        private void DrawBorders(IXLWorksheet worksheet, int actualLastColumn)
         {
             var rightBorder = worksheet.Range(configuration.ReportTitleRow, actualLastColumn, configuration.LastRow, actualLastColumn);
 
