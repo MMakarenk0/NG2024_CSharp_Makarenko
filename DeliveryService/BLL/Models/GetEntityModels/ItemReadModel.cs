@@ -1,6 +1,6 @@
-﻿namespace DataLayer.Models;
+﻿namespace BLL.Models.GetEntityModels;
 
-public class ItemDto
+public class ItemReadModel
 {
     public Guid Id { get; set; }
     public Guid? SenderId { get; set; }
@@ -8,7 +8,7 @@ public class ItemDto
     public float Weight { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public List<Guid> CategoryIds { get; set; } = new List<Guid>();
+    public List<CategoryReadModel> Categories { get; set; } = new List<CategoryReadModel>();
     public Guid? StorageId { get; set; }
     public DateTime Date { get; set; }
     public bool isReceived { get; set; }

@@ -12,6 +12,8 @@
         public ICollection<ItemCategory> ItemCategories { get; set; } = new List<ItemCategory>();
         public Guid? StorageId { get; set; }
         public Storage? Storage { get; set; }
+        public DateTime Date { get; set; }
+        public bool isReceived { get; set; }
     }
 }
 
